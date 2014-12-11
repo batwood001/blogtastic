@@ -13,7 +13,13 @@
     </form>
   
     <% @comments.each do |comment| %>
-      <p><%= comment['user'] %>: <%= comment['content'] %></p>
+      <form action="/delete_comment" method="post">
+      <input type='hidden' name='id' value='<%= comment['id'] %>'>
+      <input type='hidden' name='page_id' value='<%= @post['id'] %>'>
+      <p><%= comment['user'] %>: <%= comment['content'] %> <% if comment['user_id'] == @current_user['id'] %><button>Delete Comment</button>
+      <% end %></p></form>
+      
     <% end %>
   </div>
 </div><!-- end sixteen columnns -->
+

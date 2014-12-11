@@ -1,5 +1,4 @@
 require 'sinatra'
-require 'sinatra/reloader'
 require 'pry-byebug'
 require 'rack-flash'
 
@@ -124,6 +123,7 @@ class Blogtastic::Server < Sinatra::Application
     @post = Blogtastic::PostsRepo.find db, params[:id]
     @comments = Blogtastic::CommentsRepo.post_comments db, params[:id]
     @user = Blogtastic::UsersRepo.find db, @post['user_id']
+   # @current_user = Blogtastic::UsersRepo.find db, user_id
 
     @comments.map do |c|
       comment_user = Blogtastic::UsersRepo.find db, c['user_id']
@@ -151,6 +151,11 @@ class Blogtastic::Server < Sinatra::Application
     Blogtastic::PostsRepo.destroy db, params[:id]
     redirect to '/posts'
   end
-end
 
-##dwuweihu
+  post '/delete_comment' do
+    db = Blogtastic.create_db_connection 'blogtastic'
+    Blogtastic::CommentsRepo.destroy db, params[:id]
+    redirect to '/posts/' + params[:page_id]
+  end
+
+end
